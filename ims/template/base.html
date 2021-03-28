@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--{% load static %}-->
+<head>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/custom/mystyle.css' %}" >
+    <link rel="icon" type="image/png" href = "{% static 'media/logo-ifm.png' %}">
+    <meta charset="UTF-8">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width"style="position: absolute; overflow:auto">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <style>
+    
+.right {
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  padding: 10px;
+}
+body {
+  font-family: "Lato", sans-serif;
+}
+.b {
+  font-size: 25px;
+  padding: 10px;
+  color:white;
+}
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #191919;
+  color: #FFA500;
+  padding: 10px 15px;
+  border: none;
+}
+
+.openbtn:hover {
+  background-color: #404040;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+
+.active {
+  background-color: #4CAF50;
+}
+            .new-badge {
+            display: inline-block;
+            padding: 0 5px;
+            border-radius: 8px;
+            background: #097bbf;
+            color: #fff;
+            font-weight: 700;
+            font-size: 10px;
+            line-height: 14px;
+            text-align:right;
+            
+            }
+
+.myAlert-top{
+    position: fixed;
+    top: 5px; 
+    left:2%;
+    width: 96%;
+}
+
+.myAlert-bottom{
+    position: fixed;
+    bottom: 5px;
+    left:2%;
+    width: 96%;
+}
+
+div.fullscreen {
+  position:fixed;
+  width:100%; 
+  height:960px; 
+  top: 0; 
+  left: 0; 
+  background-color: lightblue;
+}
+
+</style>
+</head>
+<body>
+<!-- Bootstrap NavBar -->
+
+      
+      <!-- This menu is hidden in bigger devices with d-sm-none. 
+           The sidebar isn't proper for smaller screens imo, so this dropdown menu can keep all the useful sidebar itens exclusively for smaller screens  -->
+      ><!-- sidebar-container END -->
+    
+      
+{% block content %}
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" >
+        <img src="{% static '/ifm.jpg' %}" height="42" width="auto" alt="ifm logo">
+<!--        <img src="{% static 'ifm-logo-only.jpg' %}" height="48" width="auto" alt="logo">-->
+  <li>
+      <a class="navbar-brand text-white" > Test Inventory Management System</a>
+  </li>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+<!--        <a class="nav-link" href="{% url 'user_home'%}">Home <span class="sr-only">(current)</span></a>-->
+      </li>
+      <li class="nav-item">
+<!--        <a class="nav-link" href="#">Project List</a>-->
+      </li>
+    <li class="nav-item">
+<!--        <a class="nav-link" href="{% url 'search'%}">Search</a>-->
+      </li>
+    </ul>
+
+      <ul class="nav fixed navbar-nav navbar-right">
+          {% if user.is_authenticated %}
+		    <li class="b">Hello,{{user.username}}</li>
+      <li class="b"><a href="{% url 'login_option' request.user.id %}"class="btn btn-outline-light btn-sm">
+          <span class="glyphicon"></span>Login Option
+      </a></li>
+         <li class="b"><a href="{% url 'logout'%}" class="btn btn-outline-light btn-sm">
+         <span class="glyphicon glyphicon-log-out"></span> Logout
+        </a></li>
+          {% endif %}
+    </ul>
+{% endblock %}
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script>
+    $('#body-row .collapse').collapse('hide'); 
+
+// Collapse/Expand icon
+$('#collapse-icon').addClass('fa-angle-double-left'); 
+
+// Collapse click
+$('[data-toggle=sidebar-colapse]').click(function() {
+    SidebarCollapse();
+});
+
+function SidebarCollapse () {
+    $('.menu-collapsed').toggleClass('d-none');
+    $('.sidebar-submenu').toggleClass('d-none');
+    $('.submenu-icon').toggleClass('d-none');
+    $('#sidebar-container').toggleClass('sidebar-expanded sidebar-collapsed');
+    
+    // Treating d-flex/d-none on separators with title
+    var SeparatorTitle = $('.sidebar-separator-title');
+    if ( SeparatorTitle.hasClass('d-flex') ) {
+        SeparatorTitle.removeClass('d-flex');
+    } else {
+        SeparatorTitle.addClass('d-flex');
+    }
+    
+    // Collapse/Expand icon
+    $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
+}
+</script>
+</body>
+</head>

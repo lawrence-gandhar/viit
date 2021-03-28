@@ -1,0 +1,66 @@
+{% extends 'superuser/super_base.html' %}
+{% block content %}
+{% csrf_token %}
+
+<div class="container" style="margin-top:120px">
+
+
+    <form action="add" method='post'>
+      {% csrf_token %}
+
+
+      <h2>Registration For New Devices For {{uniq_id}}</h2><br><br>
+
+
+     {% if messages %}
+    {% for message in messages %}
+      <div style="margin-top:10px;" class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"  role="alert">
+      {{message}}
+      </div>
+    {% endfor %}
+
+{% endif %}
+      <div class="form-group">
+        <label for="service_tag">Service Tag</label>
+        {{device_form.service_tag}}
+      </div>
+
+      <div class="dropdown">
+        <label for="floor">Floor</label>
+
+        {{device_form.location}}
+    </div>
+
+      <div class="dropdown">
+        <label for="desk">Desk No.</label>
+      {{device_form.desk_no}}
+      </div>
+
+      <div class="dropdown">
+        <label for="device">Device Type</label>
+      {{device_form.item_type}}
+      </div><br>
+
+       <div class="form-group">
+        <label for="model">Model No.</label>
+        {{device_form.model_no}}
+      </div><br>
+
+      <div class="form-group">
+        <label for="Manufacturer">Manufacturer</label>
+      {{device_form.manufacturer}}
+      </div><br>
+
+      <div class="radio">
+          <label for="Rent">Rent</label>
+        <label>{{device_form.rent}}
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button><br><br><br><br>
+
+    </div>
+
+  </form>
+  </div>
+
+
+{% endblock %}

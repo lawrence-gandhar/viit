@@ -1,0 +1,78 @@
+{% extends 'user/user_base.html' %}
+{% block content %}
+<title>Information-{{ids.uniq_id}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<br><br><br><br><br><br>
+<div class="container">
+
+{%if objs%}
+<h2>Unique ID:{{objs.service_tag.uniq_id}}</h2><br><br>  
+<h2>Service Tag:{{objs.service_tag.service_tag}}</h2><br><br>
+<h2>Location:{{objs.service_tag.location}}</h2><br><br>
+<h2>PC Type:{{objs.service_tag.pc_type}}</h2><br><br>
+<h2>Manufacturer:{{objs.service_tag.Manufacturer}}</h2><br><br>
+<h2>Model No.:{{objs.service_tag.Model_no}}</h2><br><br>
+<h2>Assigned to :{{objs.LDAP_ID}}<h2>
+
+{%else%}
+<h2>Unique ID:{{ids.uniq_id}}</h2><br><br>  
+<h2>Service Tag:{{ids.service_tag}}</h2><br><br>
+<h2>Location:{{ids.location}}</h2><br><br>
+<h2>PC Type:{{ids.pc_type}}</h2><br><br>
+<h2>Manufacturer:{{ids.Manufacturer}}</h2><br><br>
+<h2>Model No.:{{ids.Model_no}}</h2><br><br>
+<h2>Assigned to :Not Assigned<h2>
+{%endif%}
+
+
+<br>
+{% if ids.Allocation_status == 0 %}
+<button type="button" class="btn btn-secondary"  onclick="clicked();">Create Service</button>
+{% endif %}
+
+
+{% if ids.Allocation_status and user.username != objs.LDAP_ID %}
+<button type="button" class="btn btn-secondary"  onclick="clicked1();">Request To Free Item</button>
+<button type="button" class="btn btn-secondary"  onclick="clicked2();">Request To Borrow</button>
+{% endif %}
+
+<div>
+
+
+<br>   
+{% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"  role="alert">
+      {{message}}
+      </div>
+    {% endfor %}
+
+{% endif %}
+<script type="text/javascript">
+
+    function clicked() {
+       if (confirm('Do you want service of this Item')) {
+           location.href='{% url 'create_service' ids.service_tag%}'
+       } else {
+           return false;
+       }
+    }
+    
+    function clicked1() {
+
+       if (confirm('Do you want send request to {{objs.LDAP_ID}} to release Item')) {
+           location.href='{% url 'release' ids.service_tag%}'
+       } else {
+           return false;
+       }
+    }
+    function clicked2() {
+
+       if (confirm('Do you want send request to {{objs.LDAP_ID}} to Borrow Item')) {
+           location.href='{% url 'borrow' ids.service_tag%}'
+       } else {
+           return false;
+       }
+    }
+</script>
+{% endblock %}

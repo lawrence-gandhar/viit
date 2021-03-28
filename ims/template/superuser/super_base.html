@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,"style="position: fixed; overflow:auto">
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <link href="">
+      <link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+      <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+  </head>
+  <body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" >
+        <img  height="42" width="auto" alt="ifm logo">
+<!--        <img  height="48" width="auto" alt="logo">-->
+  <li>
+      <a class="navbar-brand text-white" >Inventory Management System</a>
+  </li>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+<!--        <a class="nav-link" href="{% url 'user_home'%}">Home <span class="sr-only">(current)</span></a>-->
+      </li>
+      <li class="nav-item">
+<!--        <a class="nav-link" href="#">Project List</a>-->
+      </li>
+    <li class="nav-item">
+<!--        <a class="nav-link" href="{% url 'search'%}">Search</a>-->
+      </li>
+    </ul>
+    <ul class="nav fixed navbar-nav navbar-right">
+
+  <ul class="nav fixed navbar-nav navbar-right">
+          {% if user.is_authenticated %}
+		    <li class="b">Hello,{{user.username}}</li>
+      <li class="b"><a href="{% url 'login_option' request.user.id %}"class="btn btn-outline-light btn-sm">
+          <span class="glyphicon"></span>Login Option
+      </a></li>
+         <li class="b"><a href="{% url 'logout'%}" class="btn btn-outline-light btn-sm">
+         <span class="glyphicon glyphicon-log-out"></span> Logout
+        </a></li>
+          {% endif %}
+    </ul>
+
+
+
+
+  </div>
+</nav>
+
+      <li class="nav-item dropdown d-sm-block d-md-none">
+      <img src="https://v4-alpha.getbootstrap.com/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        <a class="nav-link dropdown-toggle" href="#" id="smallerscreenmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Menu
+        </a>
+        <div class="dropdown-menu" aria-labelledby="smallerscreenmenu">
+            <a class="dropdown-item" href="#">Dashboard</a>
+<!--            <a class="dropdown-item" href="#">Profile</a>-->
+            <a class="dropdown-item" href="#">Tasks</a>
+        </div>
+      </li><!-- Smaller devices menu END -->
+
+    </ul>
+  </div>
+<!-- NavBar END -->
+
+
+
+<!-- Bootstrap row -->
+
+<div class="row" id="body-row">
+    <!-- Sidebar -->
+    <div id="sidebar-container" class="sidebar-expanded d-none d-md-block" ><!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
+        <!-- Bootstrap List Group -->
+        <ul class="list-group">
+            <!-- Separator with title -->
+            <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                <small>MAIN MENU</small>
+            </li>
+            <!-- /END Separator -->
+            <!-- Menu with submenu -->
+            <a href="{% url 'superuser_home'%}" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Home</span>
+                </div>
+            </a>
+
+            <!-- Modify Items -->
+
+            <a href="{% url 'add_items'%}" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Add Items</span>
+                </div>
+            </a>
+
+            <a href="{% url 'edit_item'%}" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Modify Items</span>
+                </div>
+            </a>
+
+            <a href="{% url 'search_items'%}" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Search Item</span>
+                </div>
+            </a>
+
+
+             <a href="{% url 'ldap'%}" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="menu-collapsed">LDAPS Account</span>
+                </div>
+            </a>
+
+
+
+
+
+
+<!--           <a href="#" class="bg-dark list-group-item list-group-item-action">-->
+<!--                <div class="d-flex w-100 justify-content-start align-items-center">-->
+<!--                    <span class="fa fa-question fa-fw mr-3"></span>-->
+<!--                    <span class="menu-collapsed">Help</span>-->
+<!--                </div>-->
+<!--            </a>-->
+
+
+            <a href="#" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span id="collapse-icon" class="fa fa-2x mr-3"></span>
+                    <span id="collapse-text" class="menu-collapsed">Collapse</span>
+                </div>
+            </a>
+
+        </ul>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+    </div>
+
+
+<style>
+
+#body-row {
+    margin-left:0;
+    margin-right:0;
+}
+#sidebar-container {
+    height: 100%;
+    top: 66px;
+    left: 0;
+    background-color: #333;
+    padding: 0;
+    position: fixed;
+}
+.sidebar-expanded {
+    width: 230px;
+}
+.sidebar-collapsed {
+    width: 60px;
+}
+
+#sidebar-container .list-group a {
+    height: 50px;
+    color: white;
+}
+
+#sidebar-container .list-group .sidebar-submenu a {
+    height: 45px;
+    padding-left: 30px;
+}
+.sidebar-submenu {
+    font-size: 0.9rem;
+}
+
+.sidebar-separator-title {
+    background-color: #333;
+    height: 35px;
+}
+.sidebar-separator {
+    background-color: #333;
+    height: 25px;
+}
+.logo-separator {
+    background-color: #333;
+    height: 60px;
+}
+
+#sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
+  content: " \f0d7";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 10px;
+}
+#sidebar-container .list-group .list-group-item[aria-expanded="true"] .submenu-icon::after {
+  content: " \f0da";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 10px;
+}
+
+</style>
+
+    <script>
+
+    $(document).ready(function() {
+        $('#tabular_view').DataTable();
+    } );
+
+// Hide submenus
+$('#body-row .collapse').collapse('hide');
+
+// Collapse/Expand icon
+$('#collapse-icon').addClass('fa-angle-double-left');
+
+// Collapse click
+$('[data-toggle=sidebar-colapse]').click(function() {
+    SidebarCollapse();
+});
+
+function SidebarCollapse () {
+    $('.menu-collapsed').toggleClass('d-none');
+    $('.sidebar-submenu').toggleClass('d-none');
+    $('.submenu-icon').toggleClass('d-none');
+    $('#sidebar-container').toggleClass('sidebar-expanded sidebar-collapsed');
+
+    // Treating d-flex/d-none on separators with title
+    var SeparatorTitle = $('.sidebar-separator-title');
+    if ( SeparatorTitle.hasClass('d-flex') ) {
+        SeparatorTitle.removeClass('d-flex');
+    } else {
+        SeparatorTitle.addClass('d-flex');
+    }
+
+    $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
+}
+</script>
+  </body>
+</html>
+<style>
+    .b{
+      font-size: 20px;
+      padding: 10px;
+      color:white;
+    }
+    </style>

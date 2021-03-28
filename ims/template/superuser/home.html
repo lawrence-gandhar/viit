@@ -1,0 +1,42 @@
+{% extends 'superuser/super_base.html'%}
+
+{% block content %}
+{% csrf_token %}
+<title>superuser Home</title>
+
+<meta name="viewport" content="width=device-width">
+<div id="container" style="position: absolute;left:250px;top:90px;width:80%">
+  <div class="container">
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"  role="alert">
+      {{message}}
+      </div>
+    {% endfor %}
+{% endif %}
+  </div>
+
+<div class="card" style="margin-top:10px;, margin-right:20px;">
+    <div class="card-header bg-dark text-white"><h2>All Requests</h2></div> <br>
+    <div class="card-body">
+      {% for obj in objs%}
+      <strong><a  href="{% url 'info' obj.id %}" class="list-group-item list-group-item-action" >{{ forloop.counter }}.
+        <span>Model No. - {{obj.allocation.service_tag.model_no}}</span>, Service Tag - {{obj.allocation.service_tag}}</a></strong>
+      {%endfor%}
+      </div>
+</div>
+
+  <div class="card " style="margin-top:10px;">
+    <div class="card-header bg-dark text-white"><h2>Create Service Requests</h2></div>
+    <div class="card-body">
+      {% for ser in sers%}
+      <strong><a  href="{% url 'create' ser.id %}" class="list-group-item list-group-item-action" >{{ forloop.counter }}.
+       <span> Model No. - {{ser.service_tag.model_no }}</span>, Service Tag - {{ser.service_tag.service_tag}}</a></strong>
+      {%endfor%}
+      </div>
+</div>
+
+
+
+</div>
+{% endblock %}

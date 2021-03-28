@@ -1,0 +1,153 @@
+
+{% extends 'user/user_base.html' %}
+{% block content %}
+
+<title>Information-{{objs.service_tag.Model_no}}</title>
+<div id="container" style="position: absolute;left:250px;top:90px;width:80%">
+
+    
+{% if messages %}
+{% for message in messages %}
+  <div style="margin-left:50px;"  class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"  role="alert">
+  {{message}}
+  </div>
+{% endfor %}
+
+{% endif %}
+<div class="card" style="margin-left:50px;">
+<div class="card-header">
+
+    <button type="button" class="btn btn-secondary"  onclick="clicked();">Incorrect Item</button>
+    <button type="button" class="btn btn-secondary" onclick="clicked1();">Return to store</button>
+    <button type="button" class="btn btn-secondary" onclick="clicked2();">Free Item</button>
+    <button type="button" class="btn btn-secondary" onclick="clicked3();">Create Service</button>
+    <div class="container" style="margin-top:20px;">
+        <form id='form' method="POST" action="{% url 'Transfer' objs.id%}">
+        {% csrf_token %}
+        Transfer To:
+          <select name="mySelect" id="mySelect">
+              {{ users }}
+          {%for user in users%}
+            <option value="{{user.user}}" name="user" for="user">{{user.user}}</option>
+            {%endfor%}
+          </select>
+        <br>
+        <button type='submit' style="margin-top:20px;" class="btn btn-secondary">Transfer</button>
+        </form>
+    </div>
+
+</div>
+<div class="card-body">
+    <table class="table table-stripped"  width="0%">
+            <tbody>
+                <tr>
+                    <th style="margin-right:10px;"><h4>iepl_id  :</h4></th>
+                    <td><h4>{{objs.service_tag.iepl_id}}</h4></td>
+                </tr>
+                <tr>
+                    <th><h4>Service Tag :</h4></th>
+                    <td><h4>{{objs.service_tag.service_tag}}</h4></td>
+                </tr>
+                <tr>
+                   <th><h4>Item Type :</h4></th>
+                   <td><h4>{{objs.service_tag.item_type}}</h4></td>
+               </tr>
+                <tr>
+                   <th><h4>Host name :</h4></th>
+                   <td><h4>{{objs.service_tag.host_name}}</h4></td>
+               </tr>
+                <tr>
+                   <th><h4>Location :</h4></th>
+                   <td><h4>{{objs.service_tag.location}}</h4></td>
+               </tr>
+                <tr>
+                   <th><h4>Manufacturer :</h4></th>
+                   <td><h4>{{objs.service_tag.manufacturer}}</h4></td>
+               </tr>
+                <tr>
+                   <th><h4>Model No. :</h4></th>
+                   <td><h4>{{objs.service_tag.model_no}}</h4></td>
+               </tr>
+                <tr>
+                   <th><h4>Comments :</h4></th>
+                   <td><h4>{{objs.comment}}</h4></td>
+               </tr>
+            </tbody>
+        </table>
+
+</div>
+</div>
+</div>
+
+
+
+
+<br><br>
+
+
+
+
+
+<script type="text/javascript">
+    function clicked() {
+       if (confirm('Do you want to Report Incorrect Items')) {
+           location.href='{% url 'incorrect' objs.id%}'
+       } else {
+           return false;
+       }
+    }
+    function clicked1() {
+       if (confirm('Do you want to return to store?')) {
+           location.href='{% url 'Return_to_store' objs.id%}'
+       } else {
+           return false;
+       }
+    }
+    function clicked2() {
+       if (confirm('Do you want to free item?')) {
+           location.href='{% url 'Free_Item' objs.id%}'
+       } else {
+           return false;
+       }
+    }
+
+    function clicked3() {
+        if (confirm('Do you want to Create Service')) {
+            location.href='{% url 'create_service' objs.service_tag.service_tag%}'
+        } else {
+            return false;
+        }
+     }
+
+   $(document).on('submit','#form',function(e) {
+        var e = document.getElementById("mySelect")
+        var strUser = e.options[e.selectedIndex].value;
+        var txt='Do you want to Transfer to '+strUser;
+       if (confirm(txt)) 
+       {
+        $.ajax({
+           
+            url: '{% url 'Transfer' objs.id%}',
+            type:'POST',
+            data: {
+               name:$('#mySelect').val(),
+               csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            dataType: 'json',
+            success: function () {
+                alert("Done!!!");
+
+            }
+        });
+       }
+       else
+       {
+         return false;
+       }
+    });
+
+</script>
+</div>
+</div>
+{% endblock %}

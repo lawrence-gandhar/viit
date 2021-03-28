@@ -1,0 +1,41 @@
+{% extends 'admin/home.html' %}
+{% block content %}
+{% csrf_token %}
+<title>Search</title>
+
+<div id="container" style="position: absolute;left:250px;top:70px;width:80%">
+    <table id="tabular_view" class="table table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">S.No</th>
+          <th scope="col">IEPL ID</th>
+        <th scope="col">Service Tag</th>
+        <th scope="col">Item Type</th>
+        <th scope="col">Project</th>
+        <th scope="col">Manufacturer</th>
+        <th scope="col">Model No.</th>
+        <th scope="col">Employee</th>
+        <th scope="col">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in filter.qs %}
+          <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ item.iepl_id }}</td>
+              <td>{{ item.service_tag }}</td>
+              <td>{{ item.item_type.title }}</td>
+              <td>{{ item.project.name }}</td>
+              <td>{{ item.manufacturer }}</td>
+              <td>{{ item.model_no }}</td>
+              <td>{{ item.employee.user }}</td>
+              <td><a class="btn btn-sm btn-info "  href="{% url 'details' item.id %}"> Details</a>
+              <a class="btn btn-sm btn-danger"  href="{% url 'delete' item.id %}"> Delete</a></td>
+          </tr>
+    {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+
+{% endblock %}

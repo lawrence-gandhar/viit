@@ -1,0 +1,149 @@
+{% extends 'admin/admin_account.html' %}
+{% block content %}
+
+
+<div class="container">
+  <h2>Modify Items</h2><br><br>
+
+  <div id="container" style="position: absolute;left:250px;top:70px;width:80%">
+      <table id="tabular_view" class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col">S.No</th>
+            <th scope="col">IEPL ID</th>
+          <th scope="col">Service Tag</th>
+          <th scope="col">Item Type</th>
+          <th scope="col">Project</th>
+          <th scope="col">Manufacturer</th>
+          <th scope="col">Model No.</th>
+          <th scope="col">Employee</th>
+          <th scope="col">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.iepl_id }}</td>
+                <td>{{ item.service_tag }}</td>
+                <td>{{ item.item_type.title }}</td>
+                <td>{{ item.project.name }}</td>
+                <td>{{ item.manufacturer }}</td>
+                <td>{{ item.model_no }}</td>
+                <td>{{ item.employee.user }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm" type="button" onclick='editItemsModal({{item.id}}, "{{ item.iepl_id }}", "{{ item.service_tag }}", "{{item.location.id}}", "{{item.desk_no}}", "{{item.item_type.id}}", "{{item.model_no}}", "{{item.manufacturer.id}}", "{{item.rent}}", "{{item.allocation_status}}", "{{item.employee.id}}", "{{item.PO_number}}", "{{item.project.id}}")'>Edit</button>
+                  <a class="btn btn-sm btn-info"  href="{% url 'details' item.id %}">Details</a>
+                  <a class="btn btn-sm btn-danger"  href="{% url 'delete' item.id %}"> Delete</a>
+                </td>
+            </tr>
+      {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog" id="editItemsModal">
+  <div class="modal-dialog" role="document">
+    <form action="{% url 'modify_items' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" id="device_id" name="device_id">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Item : <span id="title-head"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="service_tag">Service Tag</label>
+          {{device_form.service_tag}}
+        </div>
+        <div class="form-group">
+          <label for="floor">Floor</label>
+          {{device_form.location}}
+        </div>
+        <div class="form-group">
+          <label for="desk">Desk No.</label>
+          {{device_form.desk_no}}
+        </div>
+        <div class="form-group">
+          <label for="device">Device Type</label>
+          {{device_form.item_type}}
+        </div>
+        <div class="form-group">
+          <label for="model">Model No.</label>
+          {{device_form.model_no}}
+        </div>
+        <div class="form-group">
+          <label for="Manufacturer">Manufacturer</label>
+          {{device_form.manufacturer}}
+        </div>
+        <div class="form-group">
+          <label for="Rent">Rent</label>
+          {{device_form.rent}}
+        </div>
+        <div class="form-group">
+          <label for="Rent">Allocation Status</label>
+          {{device_form.allocation_status}}
+        </div>
+        <div class="form-group">
+          <label for="Rent">Employee</label>
+          {{device_form.employee}}
+        </div>
+        <div class="form-group">
+          <label for="Rent">PO Number</label>
+          {{device_form.PO_number}}
+        </div>
+        <div class="form-group">
+          <label for="Rent">Project</label>
+          {{device_form.project}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+
+<script>
+
+$(document).ready(function(){});
+
+
+function editItemsModal(id, iepl_id, service_tag, location, desk_no, item_type, model_no, manufacturer, rent, allocation_status, employee, PO_number, project){
+
+  $("#title-head").text(iepl_id);
+  $("#device_id").val(id);
+  $("#id_service_tag").val(service_tag);
+  $("#id_location").val(location);
+  $("#id_desk_no").val(desk_no);
+  $("#id_item_type").val(item_type);
+  $("#id_model_no").val(model_no);
+  $("#id_manufacturer").val(manufacturer);
+  $("#id_allocation_status").val(allocation_status);
+  $("#id_employee").val(employee);
+  $("#id_PO_number").val(PO_number);
+  $("#id_project").val(project);
+
+  if(rent == "False") rent = 0;
+  else rent = 1;
+
+  $("#id_rent").val(rent);
+
+  $("#editItemsModal").modal('show');
+}
+
+
+</script>
+
+
+
+{% endblock %}

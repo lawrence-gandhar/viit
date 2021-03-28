@@ -1,0 +1,27 @@
+<!--{% extends 'user/user_base.html' %}-->
+
+{% block content %}
+{% csrf_token %}
+<title>User Home</title>
+<meta name="viewport" content="width=device-width">
+<div class="container" style="position: absolute;left:240px;top:100px;width:90%;">
+  {% if objs|length > 0 %}
+    <div class="card">
+      <div class="card-header bg-dark text-white" style=""><h2>All Assigned Items</h2></div>
+  <div style="position: relative;" class="list-group">
+
+
+    {%for obj in objs%}
+      <strong><a href="{% url 'Information' obj.id %}" style="padding:20px;" class="list-group-item list-group-item-action" >
+        <scope>{{ forloop.counter }}.</scope><scope>Model No. - {{obj.service_tag.model_no}} , </scope>
+        Comments: {{obj.comment}}</scope></a></strong><br>
+      {%endfor%}
+
+  </div></div>
+    {% else %}
+    <div class="alert alert-info"  ><p><b>No Assigned Items for you !!</b></p> </div>
+  {% endif %}
+
+
+</div>
+{% endblock %}

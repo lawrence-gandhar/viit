@@ -1,0 +1,85 @@
+{% extends 'superuser/super_base.html' %}
+{% block content %}
+<title>Ldap Accounts</title>
+
+
+<div id="container" style="position: absolute;left:280px;top:100px;width:80%">
+{% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"  role="alert">
+      {{message}}
+      </div>
+    {% endfor %}
+{% endif %}
+
+    <div class="row">
+
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white"><h3>All Allowed Accounts</h3></div>
+            <div class="card-body">
+    <form method="post" action="disallow">
+    <button type="submit" class="btn btn-secondary"  onclick="if (confirm('Sure ?? Disallow account ??'))
+    commentDelete(1); return false"">Disallow</button><br><br>
+    {%csrf_token%}
+    {%for li in allow%}
+        <input type="checkbox" name="name" value="{{li}}"/>
+        <div style="position: relative;right:-30px;top:-33px">
+            <strong><a class="list-group-item list-group-item-action" >
+                <span>User - {{ li.first_name }} {{li.last_name}},</span>
+            Username- {{li}}</a></strong></div>
+{%endfor%}
+    </form>
+            </div>
+            </div>
+    </div>
+
+        <div class="col-sm-6" >
+            {% if dis%}
+<div class="card">
+    <div class="card-header bg-dark text-white"><h3> All Disallowed Accounts</h3></div>
+            <div class="card-body">
+    <form method="post" action="allow">
+        <button type="submit" class="btn btn-secondary"  onclick="if (confirm('Sure ?? Allow account ??'))
+    commentDelete(1); return false">Allow</button><br><br>
+        {%csrf_token%}
+        {%for li in dis%}
+            <input type="checkbox" name="name" value="{{li}}"/>
+            <div style="position: relative;right:-30px;top:-33px">
+            <strong><a class="list-group-item list-group-item-action" >
+                <span>User - {{ li.first_name }} {{li.last_name}},</span>
+            Username- {{li}}</a></strong></div>
+{% endfor %}
+
+    </form>
+    </div>
+{% endif %}
+        </div>
+
+        </div>
+    </div>
+
+
+</div>
+<script type="text/javascript">
+
+    function clicked() {
+       if (confirm('Sure?? Disallow Account ')) {
+           
+           location.href='{% url 'disallow'%}'
+       } else {
+           return false;
+       }
+    }
+    function clicked1() {
+       if (confirm('Sure?? Allow Account')) {
+           location.href='{% url 'allow'%}'
+       } else {
+           return false;
+       }
+    }
+
+</script>
+
+
+{%endblock%}

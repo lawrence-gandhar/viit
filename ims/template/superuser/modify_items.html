@@ -1,0 +1,104 @@
+{% extends 'superuser/super_base.html' %}
+{% block content %}
+
+
+<div class="container">
+    <h2>Modify Items</h2><br><br>
+       <div class="col-md-12" style="margin-top:30px">
+           {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"  role="alert">
+      {{message}}
+      </div>
+    {% endfor %}
+           {% endif %}
+<form id="device_select_form" method="post">
+    <div class="form-group">
+        {% csrf_token %}
+        <input type="hidden" name="form2" value="0">
+        <label>Select Device</label>
+        <select id="device_id" name="id" class="form-control" onchange="device_changed(this)">
+            <option value="">--Select a device--</option>
+            {% for i in items_list %}
+            <option value="{{i.id}}">{{i.iepl_id}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>
+     {% if view_form %}
+     <form method="post">
+         {% csrf_token %}
+         <input type="hidden" name="form2" value="1">
+         <input type="hidden" name="device_id_sel" id="device_id_sel" value="{{device_id}}">
+         <div class="form-group">
+        <label for="service_tag">Service Tag</label>
+        {{device_form.service_tag}}
+      </div>
+
+      <div class="dropdown">
+        <label for="floor">Floor</label>
+
+        {{device_form.location}}
+    </div>
+
+      <div class="dropdown">
+        <label for="desk">Desk No.</label>
+      {{device_form.desk_no}}
+      </div>
+
+      <div class="dropdown">
+        <label for="device">Device Type</label>
+      {{device_form.item_type}}
+      </div><br>
+
+       <div class="form-group">
+        <label for="model">Model No.</label>
+        {{device_form.model_no}}
+      </div><br>
+
+      <div class="form-group">
+        <label for="Manufacturer">Manufacturer</label>
+      {{device_form.manufacturer}}
+      </div><br>
+
+      <div class="form-group">
+           <label for="Rent">Rent</label>
+        {{device_form.rent}}
+      </div>
+      <div class="form-group">
+           <label for="Rent">Allocation Status</label>
+       {{device_form.allocation_status}}
+      </div>
+         <div class="form-group">
+           <label for="Rent">Employee</label>
+       {{device_form.employee}}
+      </div>
+         <div class="form-group">
+           <label for="Rent">PO Number</label>
+       {{device_form.PO_number}}
+      </div>
+         <div class="form-group">
+           <label for="Rent">Project</label>
+       {{device_form.project}}
+      </div>
+
+
+
+      <button type="submit" class="btn btn-primary">Submit</button><br><br><br><br>
+     </form>
+    {% endif %}
+</div>
+</div>
+
+<script>
+
+    function device_changed(elem){
+
+        if(elem.value!=""){
+            myform = document.getElementById('device_select_form');
+            myform.submit()
+        }
+    }
+</script>
+
+{% endblock %}

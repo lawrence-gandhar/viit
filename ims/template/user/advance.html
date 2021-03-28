@@ -1,0 +1,427 @@
+{% extends 'user/user_base.html' %}
+{% block content %}
+
+<title>Advance filtering</title>>
+<div id="container" style="position: absolute;left:280px;top:70px;width:80%">
+
+
+<div class="card" style="margin-top:20px;, margin-right:20px;">
+    <div class="card-header bg-dark text-white"><h2>Advance filtering</h2></div> <br>
+    <div class="card-body">
+        <form method="get">
+            {{ filter.form.media }}
+            {{ filter.form.as_p }}
+            <button class="btn btn-primary btn-lg" type="submit" name="search">Search</button>
+        </form></div>
+
+
+<!--    <a align="right" style="margin-right:20px;"> <h1>Count : {{ filter.qs.count }}</h1></a>-->
+    {% if filter.qs.count == 0 %}
+     <a align="center" style="margin-right:20px;"> <h1>Result Count : {{ filter.qs.count }}</h1></a>
+<table class="table table-bordered" style="display:None;">
+    {% else %}
+      <a align="right" style="margin-right:20px;"> <h1>Count : {{ filter.qs.count }}</h1></a>
+<table class="table table-bordered">
+    {% endif %}
+    <thead >
+    <tr>
+      <th scope="col">S.No</th>
+      <th scope="col">Service Tag</th>
+      <th scope="col">Item Type</th>
+      <th scope="col">Project</th>
+      <th scope="col">Manufacturer</th>
+      <th scope="col">Model No.</th>
+      <th scope="col">Employee</th>
+    </tr>
+  </thead>
+
+
+
+
+  <tbody>
+    {% for item in filter.qs %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.service_tag }}</a></td>
+            <td>{{ item.item_type.title }}</a></td>
+            <td>{{ item.project.name }}</td>
+            <td>{{ item.manufacturer }}</td>
+            <td>{{ item.model_no }}
+            <td>{{ item.employee.user }}
+    {% endfor %}
+</div>
+    {%if objss%}
+
+
+    <div id="container" style="position: absolute;left:1200px;top:130px;width:max-content">
+
+    {% if objss.Allocation_status == 0 %}
+<button type="button" class="btn btn-secondary"  onclick="clicked();">Create Service</button><br>
+  {% endif %}
+
+
+{% if objss.Allocation_status and user.username != ids.LDAP_ID %}
+<button type="button" class="btn btn-secondary"  onclick="clicked1();">Request To Free Item</button>
+<button type="button" class="btn btn-secondary"  onclick="clicked2();">Request To Borrow</button>
+{% endif %}
+
+{% if objss.Allocation_status and user.username == ids.LDAP_ID %}
+
+<button type="button" class="btn btn-secondary"  onclick="clicked3();">Incorrect Item</button>
+
+<button type="button" class="btn btn-secondary" onclick="clicked4();">Return to store</button>
+
+<button type="button" class="btn btn-secondary" onclick="clicked5();">Free Item</button>
+
+<button type="button" class="btn btn-secondary" onclick="clicked6();">Create Service</button><br><br>
+
+<form id='form' method="POST" action="{% url 'Transfer' ids.id%}">
+    {% csrf_token %}
+    Transfer To:
+      <select name="mySelect" id="mySelect">
+      {%for user in users%}
+        <option value="{{user.username}}" name="user" for="user">{{user.username}}</option>
+        {%endfor%}
+      </select>
+    <br>
+    <button type='submit' class="btn btn-secondary">Transfer</button>
+    </form>
+
+    <script>
+      function clicked3() {
+        if (confirm('Do you want to Report Incorrect Items')) {
+            location.href='{% url 'incorrect' ids.id%}'
+        } else {
+            return false;
+        }
+     }
+     function clicked4() {
+        if (confirm('Do you want to return to store?')) {
+            location.href='{% url 'Return_to_store' ids.id%}'
+        } else {
+            return false;
+        }
+     }
+     function clicked5() {
+        if (confirm('Do you want to free item?')) {
+            location.href='{% url 'Free_Item' ids.id%}'
+        } else {
+            return false;
+        }
+     }
+    
+     function clicked6() {
+         if (confirm('Do you want to Create Service')) {
+             location.href='{% url 'create_service' objss.service_tag%}'
+         } else {
+             return false;
+         }
+      }
+    </script>
+  {%endif%}
+
+  <script type="text/javascript">
+
+    function clicked() {
+       if (confirm('Do you want service of this Item')) {
+           location.href='{% url 'create_service' objss.service_tag%}'
+       } else {
+           return false;
+       }
+    }
+    
+    function clicked1() {
+  
+       if (confirm('Do you want send request to {{objs.LDAP_ID}} to release Item')) {
+           location.href='{% url 'release' objss.service_tag%}'
+       } else {
+           return false;
+       }
+    }
+    function clicked2() {
+  
+       if (confirm('Do you want send request to {{objs.LDAP_ID}} to Borrow Item')) {
+           location.href='{% url 'borrow' objss.service_tag%}'
+       } else {
+           return false;
+       }
+    }
+  
+    
+  </script>
+  
+  
+<br>
+  <h2>Unique ID:{{objss.uniq_id}}</h2><br><br>  
+<h2>Service Tag:{{objss.service_tag}}</h2><br><br>
+<h2>Location:{{objss.location}}</h2><br><br>
+<h2>PC Type:{{objss.pc_type}}</h2><br><br>
+<h2>Manufacturer:{{objss.Manufacturer}}</h2><br><br>
+<h2>Model No.:{{objss.Model_no}}</h2><br><br>
+{%if objss.Allocation_status%}
+<h2>Assigned to :{{ids.LDAP_ID}}<h2>
+{%else%}
+<h2>Unassigned</h2><br>
+{%endif%}
+
+{%if hists%}
+  <h2>History Log</h2>
+<br>
+  <table>
+    <tr>
+      <th>Username</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+    {%for hist in hists%}
+    <tr>  
+      <td>
+         {{hist.LDAP_ID}}</td>
+         <td>{{hist.date}}</td>
+         <td>{{hist.status}}</td>
+    </tr>
+    {%endfor%}
+</table>
+<br>
+{%endif%}
+
+    </div>
+    {%endif%}
+
+
+
+<div id="container" style="position: absolute;left:400px;top:350px;width:max-content">
+  
+{%if objs%}
+  <h2>Result:</h2>
+<br>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Service Tag</th>
+      <th>Location</th>
+      <th>Pc Type</th>
+    </tr>
+    {%for obj in objs%}
+    <tr>  
+      <td>
+      
+        <a href="{% url 'tp' obj.ID %}">
+      
+         {{obj.ID}}</td>
+         <td>{{obj.service_tag}}</td>
+         <td>{{obj.location}}</td>
+         <td>{{obj.pc_type}}</td>
+    </tr>
+{%endfor%}
+</table>
+<br>
+<h3>Query OK...Returned {{cnt}}/{{total}}</h3>  
+{%endif%}
+
+
+{% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}"  role="alert">
+      {{message}}
+      </div>
+    {% endfor %}
+{% endif %}
+</div>
+
+
+
+  <script>
+
+  function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false;}
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(a);
+        /*for each item in the array...*/
+        for (i = 0; i < arr.length; i++) {
+          /*check if the item starts with the same letters as the text field value:*/
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            /*execute a function when someone clicks on the item value (DIV element):*/
+            b.addEventListener("click", function(e) {
+                /*insert the value for the autocomplete text field:*/
+                inp.value = this.getElementsByTagName("input")[0].value;
+                /*close the list of autocompleted values,
+                (or any other open lists of autocompleted values:*/
+                closeAllLists();
+            });
+            a.appendChild(b);
+          }
+        }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function(e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+          /*If the arrow DOWN key is pressed,
+          increase the currentFocus variable:*/
+          currentFocus++;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 38) { //up
+          /*If the arrow UP key is pressed,
+          decrease the currentFocus variable:*/
+          currentFocus--;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 13) {
+          /*If the ENTER key is pressed, prevent the form from being submitted,*/
+          e.preventDefault();
+          if (currentFocus > -1) {
+            /*and simulate a click on the "active" item:*/
+            if (x) x[currentFocus].click();
+          }
+        }
+    });
+    function addActive(x) {
+      /*a function to classify an item as "active":*/
+      if (!x) return false;
+      /*start by removing the "active" class on all items:*/
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      /*add class "autocomplete-active":*/
+      x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+      /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = 0; i < x.length; i++) {
+        x[i].classList.remove("autocomplete-active");
+      }
+    }
+    function closeAllLists(elmnt) {
+      /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+      var x = document.getElementsByClassName("autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
+        if (elmnt != x[i] && elmnt != inp) {
+          x[i].parentNode.removeChild(x[i]);
+        }
+      }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+  }
+  
+  /*An array containing all the country names in the world:*/
+  var countries = ["name","uniq_id","project_status","service_tag","location","desk_no","pc_type","Manufacturer","Model_no","rent","Allocation_status","Allocation_status and Manufacturer","project_id","service_tag","LDAP_ID","comments","new","date"];
+  
+  /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+  autocomplete(document.getElementById("myInput"), countries);
+
+  </script>
+  
+
+
+
+
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font: 16px Arial;  
+    }
+    
+    /*the container must be positioned relative:*/
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
+    
+    input {
+      border: 1px solid transparent;
+      background-color: #f1f1f1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    
+    input[type=text] {
+      background-color: #f1f1f1;
+      width: 100%;
+    }
+    
+    input[type=submit] {
+      background-color: grey;
+      color: #fff;
+      cursor: pointer;
+    }
+    
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+    
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff; 
+      border-bottom: 1px solid #d4d4d4; 
+    }
+    
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+      background-color: #e9e9e9; 
+    }
+    
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+      background-color: DodgerBlue !important; 
+      color: #ffffff; 
+    }
+
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    </style>
+
+{%endblock%}
